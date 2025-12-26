@@ -4,6 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import { BookCard } from "./BookCard";
 import SearchInput from "./SearchInput";
 import EmptyState from "./EmptyState";
+import { CategoryList } from "./CategoryList";
 
 interface Product {
   id: number;
@@ -20,11 +21,17 @@ export const CatalogContainer = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true);
       try {
-        const response = await fetch("https://dummyjson.com/products?limit=12");
+        const url = selectedCategory
+          ? `https://dummyjson.com/products/category/${selectedCategory}`
+          : "https://dummyjson.com/products?limit=12";
+
+        const response = await fetch(url);
         const data = await response.json();
         setProducts(data.products);
       } catch (error) {
@@ -35,7 +42,7 @@ export const CatalogContainer = () => {
     };
 
     fetchProducts();
-  }, []);
+  }, [selectedCategory]);
 
   const filteredProducts = useMemo(() => {
     const lowerQuery = searchQuery.toLowerCase();
@@ -46,19 +53,21 @@ export const CatalogContainer = () => {
     );
   }, [products, searchQuery]);
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center min-h-[50vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-8">
-      <SearchInput value={searchQuery} onChange={setSearchQuery} />
+      <div className="flex flex-col gap-4">
+        <SearchInput value={searchQuery} onChange={setSearchQuery} />
+        <CategoryList
+          selectedCategory={selectedCategory}
+          onSelectCategory={setSelectedCategory}
+        />
+      </div>
 
-      {filteredProducts.length > 0 ? (
+      {loading ? (
+        <div className="flex justify-center items-center min-h-[50vh]">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+        </div>
+      ) : filteredProducts.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-in fade-in duration-500">
           {filteredProducts.map((product) => (
             <BookCard
@@ -73,7 +82,7 @@ export const CatalogContainer = () => {
           ))}
         </div>
       ) : (
-        <EmptyState query={searchQuery} />
+        <EmptyState query={searchQuery || (selectedCategory ? `category: ${selectedCategory}` : "")} />
       )}
     </div>
   );
