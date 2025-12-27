@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-white relative z-0">
       <div className="container mx-auto p-8 max-w-7xl">
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<div className="flex w-full items-center justify-center">Loading...</div>}>
           <CatalogContent />
         </Suspense>
       </div>
