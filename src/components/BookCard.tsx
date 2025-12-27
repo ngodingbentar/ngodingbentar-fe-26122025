@@ -1,23 +1,22 @@
-"use client";
+import { IProduct } from "@/types";
+import { formatRupiah } from "@/utils/formatRupiah";
+import { FaStar } from "react-icons/fa";
 import Image from "next/image";
+import { useMemo } from "react";
 
 interface BookCardProps {
-  title: string;
-  price: number;
-  thumbnail: string;
-  category: string;
-  rating: number;
-  description: string;
+  product: IProduct;
 }
 
-export const BookCard = ({
-  title,
-  price,
-  thumbnail,
-  category,
-  rating,
-  description,
-}: BookCardProps) => {
+export const BookCard = ({ product }: BookCardProps) => {
+  const { title, price, discountPercentage, thumbnail, category, rating, description } = product;
+
+  const originalPrice = useMemo(() => {
+    return discountPercentage > 0
+      ? price / (1 - discountPercentage / 100)
+      : null;
+  }, [discountPercentage, price])
+
   return (
     <div className="cursor-pointer bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-zinc-100 flex flex-col h-full group">
       <div className="relative h-48 w-full overflow-hidden bg-zinc-100">
@@ -26,11 +25,15 @@ export const BookCard = ({
           alt={title}
           fill
           className="object-cover group-hover:scale-105 transition-transform duration-500"
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
         />
-        <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-semibold text-zinc-900 shadow-sm">
-          ★ {rating}
+        <div className="absolute top-2 right-2 bg-white/90 backdrop-blur-sm px-2 py-1 rounded-full text-xs font-semibold text-zinc-900 shadow-sm flex items-center gap-1">
+          <FaStar className="text-yellow-500" /> {rating}
         </div>
+        {discountPercentage > 0 && (
+          <div className="absolute top-2 left-2 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold shadow-sm">
+            -{Math.round(discountPercentage)}%
+          </div>
+        )}
       </div>
       <div className="p-4 flex flex-col flex-grow">
         <div className="text-xs font-medium text-blue-600 mb-1 uppercase tracking-wider">
@@ -43,9 +46,16 @@ export const BookCard = ({
           {description}
         </p>
         <div className="flex items-center justify-between mt-auto pt-4 border-t border-zinc-100">
-          <span className="text-xl font-bold text-zinc-900">
-            Rp {price}
-          </span>
+          <div className="flex flex-col">
+            {originalPrice && (
+              <span className="text-xs text-zinc-400 line-through">
+                {formatRupiah(originalPrice)}
+              </span>
+            )}
+            <span className="text-xl font-bold text-zinc-900">
+              {formatRupiah(price)}
+            </span>
+          </div>
           <button className="px-4 py-2 bg-zinc-900 text-white text-sm font-semibold rounded-lg hover:bg-zinc-800 transition-colors cursor-pointer">
             Details
           </button>

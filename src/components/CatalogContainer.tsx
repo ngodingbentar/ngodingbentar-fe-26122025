@@ -5,20 +5,10 @@ import { BookCard } from "./BookCard";
 import SearchInput from "./SearchInput";
 import EmptyState from "./EmptyState";
 import { CategoryList } from "./CategoryList";
-
-interface Product {
-  id: number;
-  title: string;
-  description: string;
-  price: number;
-  rating: number;
-  brand: string;
-  category: string;
-  thumbnail: string;
-}
+import { IProduct } from "@/types";
 
 export const CatalogContainer = () => {
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<IProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -72,12 +62,7 @@ export const CatalogContainer = () => {
           {filteredProducts.map((product) => (
             <BookCard
               key={product.id}
-              title={product.title}
-              price={product.price}
-              thumbnail={product.thumbnail}
-              category={product.category}
-              rating={product.rating}
-              description={product.description}
+              product={product}
             />
           ))}
         </div>
