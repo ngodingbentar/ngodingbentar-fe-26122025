@@ -5,6 +5,7 @@ import { BookCard } from "./BookCard";
 import SearchInput from "./SearchInput";
 import EmptyState from "./EmptyState";
 import { CategoryList } from "./CategoryList";
+import { Pagination } from "./Pagination";
 import { IProduct } from "@/types";
 
 export const CatalogContainer = () => {
@@ -12,6 +13,33 @@ export const CatalogContainer = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 12;
+
+  const filteredProducts = useMemo(() => {
+    const lowerQuery = searchQuery.toLowerCase();
+    return products.filter(
+      (product) =>
+        product.title.toLowerCase().includes(lowerQuery) ||
+        product.category.toLowerCase().includes(lowerQuery)
+    );
+  }, [products, searchQuery]);
+
+  const totalPages = useMemo(() => {
+    return Math.ceil(filteredProducts.length / itemsPerPage);
+  }, [filteredProducts, itemsPerPage]);
+
+  const paginatedProducts = useMemo(() => {
+    return filteredProducts.slice(
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage
+    );
+  }, [filteredProducts, currentPage, itemsPerPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -19,7 +47,7 @@ export const CatalogContainer = () => {
       try {
         const url = selectedCategory
           ? `https://dummyjson.com/products/category/${selectedCategory}`
-          : "https://dummyjson.com/products?limit=12";
+          : "https://dummyjson.com/products?limit=100";
 
         const response = await fetch(url);
         const data = await response.json();
@@ -34,14 +62,9 @@ export const CatalogContainer = () => {
     fetchProducts();
   }, [selectedCategory]);
 
-  const filteredProducts = useMemo(() => {
-    const lowerQuery = searchQuery.toLowerCase();
-    return products.filter(
-      (product) =>
-        product.title.toLowerCase().includes(lowerQuery) ||
-        product.category.toLowerCase().includes(lowerQuery)
-    );
-  }, [products, searchQuery]);
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory]);
 
   return (
     <div className="space-y-8">
@@ -58,14 +81,22 @@ export const CatalogContainer = () => {
           <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
         </div>
       ) : filteredProducts.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-in fade-in duration-500">
-          {filteredProducts.map((product) => (
-            <BookCard
-              key={product.id}
-              product={product}
-            />
-          ))}
-        </div>
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-in fade-in duration-500">
+            {paginatedProducts.map((product) => (
+              <BookCard
+                key={product.id}
+                product={product}
+              />
+            ))}
+          </div>
+
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </>
       ) : (
         <EmptyState query={searchQuery || (selectedCategory ? `category: ${selectedCategory}` : "")} />
       )}
