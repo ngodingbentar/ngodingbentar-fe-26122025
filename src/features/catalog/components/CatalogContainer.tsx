@@ -2,10 +2,10 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { BookCard } from "./BookCard";
-import SearchInput from "./SearchInput";
-import EmptyState from "./EmptyState";
+import SearchInput from "@/components/ui/SearchInput";
+import EmptyState from "@/components/ui/EmptyState";
 import { CategoryList } from "./CategoryList";
-import { Pagination } from "./Pagination";
+import { Pagination } from "@/components/ui/Pagination";
 import { IProduct } from "@/types";
 
 export const CatalogContainer = () => {

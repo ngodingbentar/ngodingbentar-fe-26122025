@@ -56,9 +56,6 @@ export const BookCard = ({ product }: BookCardProps) => {
               {formatRupiah(price)}
             </span>
           </div>
-          <button className="px-4 py-2 bg-zinc-900 text-white text-sm font-semibold rounded-lg hover:bg-zinc-800 transition-colors cursor-pointer">
-            Details
-          </button>
         </div>
       </div>
     </div>

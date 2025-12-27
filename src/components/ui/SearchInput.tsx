@@ -14,7 +14,7 @@ const SearchInput = ({ value, onChange }: SearchInputProps) => {
       <input
         type="text"
         className="block w-full pl-10 pr-3 py-3 border border-zinc-200 rounded-2xl leading-5 bg-white text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 shadow-sm"
-        placeholder="Cari buku..."
+        placeholder="Cari judul buku..."
         value={value}
         onChange={(e) => onChange(e.target.value)}
       />
