@@ -8,7 +8,7 @@ interface BookCardProps {
   product: IProduct;
 }
 
-export const BookCard = ({ product }: BookCardProps) => {
+const BookCard = ({ product }: BookCardProps) => {
   const { title, price, discountPercentage, thumbnail, category, rating, description } = product;
 
   const originalPrice = useMemo(() => {
@@ -61,3 +61,5 @@ export const BookCard = ({ product }: BookCardProps) => {
     </div>
   );
 };
+
+export default BookCard;

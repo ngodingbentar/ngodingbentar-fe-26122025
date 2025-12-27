@@ -1,10 +1,10 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { BookCard } from "./BookCard";
+import BookCard from "./BookCard";
 import EmptyState from "@/components/ui/EmptyState";
-import { CategoryList } from "./CategoryList";
-import { Pagination } from "@/components/ui/Pagination";
+import CategoryList from "./CategoryList";
+import Pagination from "@/components/ui/Pagination";
 import { useCatalog } from "../hooks/useCatalog";
 
 const CatalogContent = () => {

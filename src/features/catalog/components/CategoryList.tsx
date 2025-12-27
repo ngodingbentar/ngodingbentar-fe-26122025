@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import { CategoryPill } from "./CategoryPill";
+import CategoryPill from "./CategoryPill";
+import { getCategories } from "@/services/catalog";
 
 interface CategoryListProps {
   selectedCategory: string;
   onSelectCategory: (category: string) => void;
 }
 
-export const CategoryList = ({
+const CategoryList = ({
   selectedCategory,
   onSelectCategory,
 }: CategoryListProps) => {
@@ -18,10 +19,7 @@ export const CategoryList = ({
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await fetch(
-          "https://dummyjson.com/products/category-list"
-        );
-        const data = await response.json();
+        const data = await getCategories();
         setCategories(data);
       } catch (error) {
         console.error("Failed to fetch categories:", error);
@@ -63,3 +61,5 @@ export const CategoryList = ({
     </div>
   );
 };
+
+export default CategoryList;

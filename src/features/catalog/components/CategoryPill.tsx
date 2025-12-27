@@ -4,7 +4,7 @@ interface CategoryPillProps {
   onClick: () => void;
 }
 
-export const CategoryPill = ({
+const CategoryPill = ({
   label,
   isActive,
   onClick,
@@ -24,3 +24,5 @@ export const CategoryPill = ({
     </button>
   );
 };
+
+export default CategoryPill;
