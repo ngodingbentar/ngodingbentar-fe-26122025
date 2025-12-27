@@ -38,7 +38,7 @@ const CatalogContent = () => {
       ) : products && products.length > 0 ? (
         <>
           <div>Menampilkan {products.length} Produk</div>
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-in fade-in duration-500">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 animate-in fade-in duration-500">
             {paginatedProducts.map((product) => (
               <BookCard
                 key={product.id}
