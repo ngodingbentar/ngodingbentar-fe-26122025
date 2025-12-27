@@ -34,7 +34,7 @@ export const CategoryList = ({
   if (!categories || categories.length === 0) return null;
 
   return (
-    <div className="relative w-full mb-8 group1s">
+    <div className="relative w-full mb-4 group1s">
       <div
         ref={scrollContainerRef}
         className="grid grid-rows-2 grid-flow-col gap-3 overflow-x-auto pb-4 scrollbar-hide py-2 px-1"

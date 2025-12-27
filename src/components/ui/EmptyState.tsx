@@ -12,10 +12,10 @@ const EmptyState = ({ query }: { query: string }) => {
         />
       </div>
       <div className="text-xl font-semibold text-zinc-900 mb-2">
-        Produk Tidak Tersedia
+        Tidak ada buku ditemukan
       </div>
       <p className="text-zinc-500 max-w-md">
-        Coba cari produk lainnya
+        Coba cari buku lainnya
       </p>
     </div>
   );
